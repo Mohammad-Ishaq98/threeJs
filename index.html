@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script type="module" src="src/main.js"></script>
+	</body>
+</html>
+<!-- https://www.tutorialspoint.com/threejs/
+https://sbcode.net/threejs/scene-camera-renderer/ -->
+
+
+<!-- 
+	yt important playlists : https://www.youtube.com/@maddogtutorials7567/playlists
+ -->
+
+
+
+
+<!-- 
+	Apologies for the confusion once again. The error "Uncaught ReferenceError: THREE is not defined" occurs because the `THREE` object is not available in the global scope of the browser console.
+
+To work around this issue, you'll need to include the Three.js library in the console before running your code. Here's how you can do it:
+
+1. Open the webpage that includes the Three.js code in a web browser.
+2. Open the browser's developer tools by right-clicking on the webpage and selecting "Inspect" or by using keyboard shortcuts like F12 or Ctrl+Shift+I (Windows) or Option+Command+I (Mac).
+3. Navigate to the "Console" tab within the developer tools.
+4. At the beginning of your code, add the line to import the Three.js library:
+
+```javascript
+const script = document.createElement('script');
+script.src = 'https://cdn.jsdelivr.net/npm/three@0.131.2/build/three.min.js';
+document.head.appendChild(script);
+```
+
+5. Press Enter to execute the code and load the Three.js library into the console.
+6. Now you can paste and modify your Three.js code, including the `material` variable, in the console.
+7. Press Enter to execute the modified code and see the changes in the rendered scene.
+
+By including the Three.js library in the console, you ensure that the necessary `THREE` object and its associated classes and methods are available for your code execution.
+ -->
