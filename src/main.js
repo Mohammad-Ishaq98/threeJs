@@ -95,6 +95,27 @@ box2.position.set(15,10,11)
 scene.add(box2)
 
 
+//************************ planegeomatry 2 ****************
+const plane2Geomatry = new THREE.PlaneGeometry(10,10,10,10);
+
+const plane2Material = new THREE.MeshBasicMaterial({
+    color : 0xFFFFF,
+    wireframe : true
+});
+
+
+
+const plane2 = new THREE.Mesh(plane2Geomatry, plane2Material);
+scene.add(plane2);
+plane2.position.set(10,20,10);
+
+plane2.geometry.attributes.position.array[0] -= 10 * Math.random();
+plane2.geometry.attributes.position.array[1] -= 10 * Math.random();
+plane2.geometry.attributes.position.array[2] -= 10 * Math.random();
+const lastPoint = plane2.geometry.attributes.position.array.length - 1;
+plane2.geometry.attributes.position.array[lastPoint] -= 10 * Math.random();
+
+
 // plane geometry like ash color wall (before)
 
 const planeGeometry = new THREE.PlaneGeometry(30,30);
@@ -103,8 +124,7 @@ const planeGeoMaterial = new THREE.MeshStandardMaterial({
     side : THREE.DoubleSide
 });
 const plane = new THREE.Mesh(planeGeometry, planeGeoMaterial);
-plane.rotation.x = -0.5 * Math.PI;
-
+plane.rotation.x = -0.5 * Math.PI; //same as Math.PI(180) / 2
 plane.receiveShadow = true;
 
 scene.add(plane);
@@ -168,14 +188,16 @@ scene.add(gridHelper);
 const mousePosition = new THREE.Vector2();
 
 window.addEventListener('mousemove', function (e) {
-    mousePosition.x = (e.clientX / this.window.innerWidth) * 2 - 1;
-    mousePosition.y = (e.clientY / this.window.innerHeight) * 2 + 1;
+    mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mousePosition.y = - (e.clientY / window.innerHeight) * 2 + 1;
 })
 
 const rayCaster = new THREE.Raycaster();
 
 
-const spehereId = sphere.id
+const spehereId = sphere.id;
+console.log(spehereId,'sphereId')
+box2.name = 'theBox';
 //dat gui
 
 const gui = new dat.GUI()
@@ -205,27 +227,46 @@ let step = 0;
 function animate (time) {
     box.rotation.x = (time / 1000);
     box.rotation.y = (time / 1000);
+
     step += options.speed;
+    sphere.position.y = 10 * Math.abs(Math.sin(step));
+
+    
     spotLight.angle = options.angle;
     spotLight.penumbra = options.penumbra;
     spotLight.intensity = options.intensify;
     spotLightHelper.update()
-    sphere.position.y = 10 * Math.abs(Math.sin(step));
 
     rayCaster.setFromCamera(mousePosition ,camera);
     const intersects = rayCaster.intersectObjects(scene.children);
-    //console.log(intersects)
+    console.log(intersects)
 
     for (let i = 0; i < intersects.length; i++) {
         if( intersects[i].object.id === spehereId ) {
             intersects[i].object.material.color.set(0xFF0000)
         }
+
+        if(intersects[i].object.name === 'theBox') {
+            intersects[i].object.rotation.x = (time / 1000);
+            intersects[i].object.rotation.y = (time / 1000);
+        }
     }
+
+    plane2.geometry.attributes.position.array[0] = 10 * Math.random();
+    plane2.geometry.attributes.position.array[1] = 10 * Math.random();
+    plane2.geometry.attributes.position.array[2] = 10 * Math.random();
+    plane2.geometry.attributes.position.array[lastPoint] = 10 * Math.random();
+    plane2.geometry.attributes.position.needsUpdate = true;
+
+
+
     renderer.render(scene, camera);
 }
 
 renderer.setAnimationLoop(animate);
  
-
-
-// sphere at 16:43
+window.addEventListener('resize', function () {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth , window.innerHeight)
+})
